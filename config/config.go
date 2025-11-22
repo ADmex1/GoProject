@@ -42,6 +42,7 @@ func LoadEnv() {
 		DBPassword:       getEnv("DB_PASSWORD", "NeuXana"),
 		DBPort:           getEnv("DB_PORT", "5432"),
 		JWTSecret:        getEnv("JWT_SECRET", "supersecret"),
+		JWTExpire:        getEnv("JWT_EXPIRATION", "24h"),
 		JWTExpireMinutes: getEnv("JWT_EXPIRY_MINUTES", "60"),
 		JWTRefreshToken:  getEnv("REFRESH_TOKEN_EXPIRED", "24h"),
 	}

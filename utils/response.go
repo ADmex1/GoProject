@@ -33,12 +33,11 @@ func BadReq(c *fiber.Ctx, Message string, err string) error {
 		Error:        err,
 	})
 }
-func NotFound(c *fiber.Ctx, Message string, data interface{}, err string) error {
+func NotFound(c *fiber.Ctx, Message string, err string) error {
 	return c.Status(fiber.StatusNotFound).JSON(response{
 		Status:       "Not Found",
 		ResponseCode: fiber.StatusNotFound,
 		Message:      Message,
-		Data:         data,
 		Error:        err,
 	})
 }
