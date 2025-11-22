@@ -6,6 +6,7 @@ import (
 	"github.com/ADMex1/GoProject/config"
 	"github.com/ADMex1/GoProject/models"
 	"github.com/ADMex1/GoProject/utils"
+	"github.com/google/uuid"
 )
 
 func AdminSeeder() {
@@ -15,6 +16,7 @@ func AdminSeeder() {
 		Email:    "ADMex1@gmail.com",
 		Password: password,
 		Role:     "admin",
+		PublicID: uuid.New(),
 	}
 	if err := config.DB.FirstOrCreate(&admin, models.User{Email: admin.Email}).Error; err != nil {
 		log.Printf("Error: %v", err)
