@@ -1,6 +1,6 @@
 CREATE TABLE mails (
     internal_id BIGSERIAL PRIMARY KEY,
-    public_id UUID NOT NULL UNIQUE,
+    public_id UUID not NULL default gen_random_uuid (),
     mail_thread_internal_id BIGINT NOT NULL,
     user_internal_id BIGINT NOT NULL,
     user_public_id UUID NOT NULL,

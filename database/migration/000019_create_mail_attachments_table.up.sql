@@ -1,6 +1,6 @@
 CREATE TABLE mail_attachment (
     internal_id BIGSERIAL PRIMARY KEY,
-    public_id UUID NOT NULL UNIQUE,
+    public_idUUID not NULL default gen_random_uuid (),
     mail_internal_id BIGINT NOT NULL,
     user_internal_id BIGINT NOT NULL,
     file TEXT NOT NULL,
