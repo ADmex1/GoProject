@@ -9,6 +9,10 @@ import (
 )
 
 type MailService interface {
+	CreateNewMailThread(mailThread models.MailThread) error
+	AddReceiver(mailThreadPublicID string, userPublicIDs []string) error
+	CreateNewMail(mailThreadPublicID string, mail models.Mail) error
+	DeleteMailThread(id uint) error
 }
 
 type MailServices struct {
@@ -16,8 +20,8 @@ type MailServices struct {
 	mailRepo repositories.MailRepository
 }
 
-func NewMailService() MailService {
-	return &MailServices{}
+func NewMailService(userRepo repositories.UserRepository, mailRepo repositories.MailRepository) MailService {
+	return &MailServices{userRepo, mailRepo}
 }
 
 func (s *MailServices) CreateNewMailThread(mailThread models.MailThread) error {
@@ -65,13 +69,18 @@ func (s *MailServices) AddReceiver(mailThreadPublicID string, userPublicIDs []st
 	return s.mailRepo.AddReceiver(uint(mailThread.InternalID), NewReceiverIDs)
 }
 
-func (s *MailServices) CreateNewMail(mail models.Mail) error {
-	users, err := s.userRepo.FindByPublicID((mail.UserPubID).String())
+func (s *MailServices) CreateNewMail(mailThreadPublicID string, mail models.Mail) error {
+	mailThread, err := s.mailRepo.FindThreadByPublicID(&mailThreadPublicID)
+	if err != nil {
+		return errors.New("Mail thread not found!")
+	}
+	users, err := s.userRepo.FindByPublicID(mail.UserPubID.String())
 	if err != nil {
 		return errors.New("user not exist")
 	}
 	mail.PublicID = uuid.New()
 	mail.UserID = users.InternalID
+	mail.MailThreadID = mailThread.InternalID
 	return s.mailRepo.CreateMail(&mail)
 }
 
