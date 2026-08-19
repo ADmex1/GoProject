@@ -20,9 +20,15 @@ func NewMailService() MailService {
 	return &MailServices{}
 }
 
-// func (s *MailServices) CreateNewMailThread(mailThreadd models.Mail)error{
-
-// }
+func (s *MailServices) CreateNewMailThread(mailThread models.MailThread) error {
+	users, err := s.userRepo.FindByPublicID(string(mailThread.SenderPublicID.String()))
+	if err != nil {
+		return errors.New("User not exist")
+	}
+	mailThread.PublicID = uuid.New()
+	mailThread.SenderID = users.InternalID
+	return s.mailRepo.CreateMailThread(&mailThread)
+}
 
 func (s *MailServices) AddReceiver(mailThreadPublicID string, userPublicIDs []string) error {
 	mailThread, err := s.mailRepo.FindThreadByPublicID(&mailThreadPublicID)
@@ -69,4 +75,6 @@ func (s *MailServices) CreateNewMail(mail models.Mail) error {
 	return s.mailRepo.CreateMail(&mail)
 }
 
-// func(s *MailServices)
+func (s *MailServices) DeleteMailThread(id uint) error {
+	return s.mailRepo.DeleteMailThread(id)
+}
