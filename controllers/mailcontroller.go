@@ -35,7 +35,7 @@ func (c *MailController) CreateMailThread(ctx *fiber.Ctx) error {
 		return utils.BadReq(ctx, "Failed to read request", errs.Error())
 	}
 	mailThread.SenderPublicID = userID
-	if err := c.service.CreateNewMailThread(*mailThread); err != nil {
+	if err := c.service.CreateNewMailThread(mailThread); err != nil {
 		return utils.BadReq(ctx, "Failed to create a Mail thread", err.Error())
 	}
 	return utils.Success(ctx, "Mail thread Created!", mailThread)
@@ -68,7 +68,7 @@ func (c *MailController) CreateNewMessage(ctx *fiber.Ctx) error {
 		return utils.BadReq(ctx, "Failed to read request", errs.Error())
 	}
 	mail.UserPubID = userID
-	if err := c.service.CreateNewMail(publicID, *mail); err != nil {
+	if err := c.service.CreateNewMail(publicID, mail); err != nil {
 		return utils.BadReq(ctx, "Failed to create mail", err.Error())
 	}
 	return utils.Success(ctx, "Mail Created!", mail)
